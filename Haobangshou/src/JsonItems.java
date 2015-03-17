@@ -8,19 +8,61 @@ public class JsonItems {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ArrayList<Money> moneys = new ArrayList<Money>();
 	private ArrayList<LogInfo> logInfos = new ArrayList<LogInfo>();
+	private ArrayList<UserTempt> users = new ArrayList<UserTempt>();
 
 	private String str = "";
 
 	JsonItems(String str) {
 		this.str = str;
 	}
-
+	public String jiexiXinyonghu() throws JSONException{
+		JSONArray ja = new JSONArray(str);
+    	JSONObject jo = new JSONObject();
+    	String panduan = "";
+    	jo = ja.getJSONObject(0);
+    	panduan = jo.getString("yonghu");
+    	if(panduan.equals("true")){
+    		User.id = jo.getInt("id");
+    	}
+    	return panduan;
+	}
+    public String jiexiDenglu() throws JSONException{
+    	JSONArray ja = new JSONArray(str);
+    	JSONObject jo = new JSONObject();
+    	String panduan = "";
+    	jo = ja.getJSONObject(0);
+    	panduan = jo.getString("denglu");
+    	if(panduan.equals("true")){
+    		User.id = jo.getInt("id");
+    	}
+    	return panduan;
+    }
+    public ArrayList<UserTempt> jiexiUsers() throws JSONException{       	
+    	    JSONArray ja = new JSONArray(str);
+		JSONObject jo = new JSONObject();
+		String userName = "";
+		String userPassWords = "";
+		int idUser;
+		UserTempt user;
+		int length = ja.length();
+		for(int i =0 ;i<length;i++){
+			jo = ja.getJSONObject(i);
+			userName = jo.getString("userName");
+			userPassWords = jo.getString("userPassWords");
+			idUser = jo.getInt("idUser");
+			user = new UserTempt(userName,userPassWords,idUser);
+			users.add(user);
+		}
+		return users;
+		}
+    	    	
 	public ArrayList<Item> jiexiShopping() throws JSONException {
 
 		JSONArray ja = new JSONArray(str);
 		JSONObject jo = new JSONObject();
 		String name = "";
 		String date = "";
+		String comment = "";
 		double amount = 0;
 		String participant = "";
 		int id = 0;
@@ -32,7 +74,8 @@ public class JsonItems {
 			amount = jo.getDouble("amount");
 			participant = jo.getString("participant");
 			id = jo.getInt("id");
-			item = new Item(name, amount, date, participant, id);
+			comment = jo.getString("comment");
+			item = new Item(name, amount, date, participant, id, comment);
 			items.add(item);
 
 		}
@@ -79,3 +122,4 @@ public class JsonItems {
 		return logInfos;
 	}
 }
+ 

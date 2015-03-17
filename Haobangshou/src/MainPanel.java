@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -19,8 +21,8 @@ public class MainPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextArea textArea;
-	private JButton button;
+	private JTextArea textArea_LogInfo;
+	private JButton button_NewShopping;
 	private ArrayList<Item> data;
 	private ArrayList<LogInfo> logInfos;
 	private JTable table;
@@ -41,12 +43,11 @@ public class MainPanel extends JPanel {
 			e1.printStackTrace();
 		}
 
-		button = new JButton("\u65B0\u8D26");
-		button.setBounds(39, 51, 117, 29);
-		button.addActionListener(new ActionListener() {
+		button_NewShopping = new JButton("\u65B0\u8D26");
+		button_NewShopping.setBounds(39, 51, 117, 29);
+		button_NewShopping.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-
 				setVisible(false);
 				Xinzhang xinzhang = new Xinzhang(frame);
 				frame.setContentPane(xinzhang);
@@ -54,16 +55,16 @@ public class MainPanel extends JPanel {
 			}
 		});
 		setLayout(null);
-		add(button);
+		add(button_NewShopping);
 
-		textArea = new JTextArea();
-		textArea.setBounds(653, 32, 190, 81);
-		textArea.setEditable(false);
-		add(textArea);
+		textArea_LogInfo = new JTextArea();
+		textArea_LogInfo.setBounds(653, 32, 190, 81);
+		textArea_LogInfo.setEditable(false);
+		add(textArea_LogInfo);
 
-		JButton button_1 = new JButton("\u4ED8\u6B3E\u5386\u53F2");
-		button_1.setBounds(39, 92, 117, 29);
-		button_1.addActionListener(new ActionListener() {
+		JButton button_History = new JButton("\u4ED8\u6B3E\u5386\u53F2");
+		button_History.setBounds(39, 92, 117, 29);
+		button_History.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				setVisible(false);
@@ -71,11 +72,11 @@ public class MainPanel extends JPanel {
 				frame.setContentPane(history);
 			}
 		});
-		add(button_1);
+		add(button_History);
 
-		JButton button_2 = new JButton("\u7ED3\u8D26");
-		button_2.setBounds(39, 134, 117, 29);
-		button_2.addActionListener(new ActionListener() {
+		JButton button_Clear = new JButton("\u7ED3\u8D26");
+		button_Clear.setBounds(39, 134, 117, 29);
+		button_Clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				setVisible(false);
@@ -83,11 +84,11 @@ public class MainPanel extends JPanel {
 				frame.setContentPane(clear);
 			}
 		});
-		add(button_2);
+		add(button_Clear);
 		
 		ArrayList name = new ArrayList();
 		ArrayList time = new ArrayList();
-		textArea.setText("");
+		textArea_LogInfo.setText("");
 
 		JLabel label_4 = new JLabel("\u767B\u9646\u4FE1\u606F\uFF1A");
 		label_4.setBounds(653, 16, 84, 16);
@@ -116,10 +117,10 @@ public class MainPanel extends JPanel {
 
 		int numberOfUser1 = name.size();
 		for (int i = 0; i < numberOfUser1; i++) {
-			textArea.append((String) name.get(i));
-			textArea.append("       ");
-			textArea.append((String) time.get(i));
-			textArea.append("\r\n");
+			textArea_LogInfo.append((String) name.get(i));
+			textArea_LogInfo.append("       ");
+			textArea_LogInfo.append((String) time.get(i));
+			textArea_LogInfo.append("\r\n");
 		}
 
 		String[] headers = { "日期", "金额", "付款人", "参与者", "ID" };
@@ -144,7 +145,35 @@ public class MainPanel extends JPanel {
 		table = new JTable(model1);
 		fitTableColumns(table);		
 		scrollPane.setViewportView(table);
+		
+		JTextArea textArea_Comment = new JTextArea();
+		textArea_Comment.setEditable(false);
+		textArea_Comment.setBounds(653, 121, 190, 116);
+		add(textArea_Comment);
 
+		table.addMouseListener(new MouseAdapter() {  //单击显示备注
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 1) {
+					int row = table.getSelectedRow();
+					DefaultTableModel tableModel = (DefaultTableModel) table
+							.getModel();
+					int id = Integer.parseInt((String)tableModel.getValueAt(row, 4));	
+					String comment = "";
+					for(int i = 0;i<data.size();i++){
+						if(data.get(i).getId() == id){
+							comment = data.get(i).getComment();
+						}
+					}
+//					String comment = data.get(id-1).getComment();
+					textArea_Comment.setText(comment);
+				}
+			}
+		});
+		
+		
+		
+		
+		
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -174,5 +203,4 @@ public class MainPanel extends JPanel {
 			column.setWidth(width + myTable.getIntercellSpacing().width + 19);
 		}
 	}
-
 }

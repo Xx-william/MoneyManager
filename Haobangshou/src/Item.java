@@ -4,15 +4,17 @@ public class Item {
 	private String date;
 	private String participant;
 	private int id;
-
-	Item(String name, double amount, String date, String participant, int id) {
+    private String comment;
+    
+	Item(String name, double amount, String date, String participant, int id,String comment) {
 		this.name = name;
 		this.amount = amount;
 		this.date = date;
 		this.participant = participant;
 		this.id = id;
+		this.comment = comment;
 	}
-
+	
 	Item() {
 
 	}
@@ -22,9 +24,14 @@ public class Item {
 		this.amount = i.getAmount();
 		this.date = i.getDate();
 		this.participant = i.getParticipant();
-		this.id = i.getId();
+		this.id = i.getId();		
 	}
-
+    public String getComment(){
+    	return this.comment;
+    }
+    public void setComment(String comment){
+    	this.comment = comment;
+    }
 	public String getName() {
 		return this.name;
 	}

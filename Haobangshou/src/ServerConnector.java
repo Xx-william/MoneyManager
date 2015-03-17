@@ -21,8 +21,7 @@ public class ServerConnector {
 	public void Update() throws UnknownHostException, IOException {
 		try {
 			InetAddress ad = InetAddress.getByName(hostName);
-			byte ip[] = ad.getAddress();
-			
+			byte ip[] = ad.getAddress();			
 			server = new Socket(InetAddress.getByAddress(ip), port);
 		} catch (Exception e) {
 			Warning war = new Warning("服务器离线");

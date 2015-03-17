@@ -11,6 +11,7 @@ public class JsonItems {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ArrayList<Money> moneys = new ArrayList<Money>();
 	private ArrayList<LogInfo> logInfos = new ArrayList<LogInfo>();
+	private ArrayList<User> users = new ArrayList<User>();
 	private User user;
 
 	JsonItems() {
@@ -32,16 +33,34 @@ public class JsonItems {
 	public void setLogInfo(ArrayList<LogInfo> logInfos) {
 		this.logInfos = logInfos;
 	}
-
+    public void setUsers(ArrayList<User> users){
+    	this.users = users;
+    }
 	public String toJsonStrUser() {
 
 		userStr = "[";
 		userStr += "{'userName':'" + user.getName() + "',";
-		userStr += "'userPassWords':'" + user.getPassword() + "'}";
+		userStr += "'userPassWords':'" + user.getPassword() + "',";
+		userStr += "'idUser':" +user.getId()+"}";
 		userStr += "]";
 		return userStr;
 	}
-
+	
+ public String toJsonStrUsers(){
+	 int size = users.size();
+	 userStr = "[";
+	 for(int i=0;i<size;i++){
+		    user = new User(users.get(i));
+			userStr += "{'userName':'" + user.getName() + "',";
+			userStr += "'userPassWords':'" + user.getPassword() + "',";
+			userStr += "'idUser':" + user.getId() + "},";
+	 }
+	 if (size != 0) {
+			userStr = userStr.substring(0, userStr.length() - 1);
+		}
+	 userStr += "]";
+	 return userStr;
+ }
 	public String toJsonStrLogInfo() {
 		int size = logInfos.size();
 		logInfoStr = "[";
@@ -67,7 +86,8 @@ public class JsonItems {
 			itemsStr += "'amount':" + item.getAmount() + ",";
 			itemsStr += "'date':'" + item.getDate() + "',";
 			itemsStr += "'participant':'" + item.getParticipant() + "',";
-			itemsStr += "'id':" + item.getId() + "},";
+			itemsStr += "'id':" + item.getId() + ",";
+			itemsStr += "'comment':'" + item.getComment() + "'},";
 		}
 		if (size != 0) {
 			itemsStr = itemsStr.substring(0, itemsStr.length() - 1);

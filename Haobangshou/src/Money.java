@@ -3,6 +3,7 @@ public class Money {
 	private String userName;
 	private double used;
 	private double spended;
+	private double money;
 
 	Money(int userId, String userName, double used, double spended) {
 		this.userId = userId;
@@ -17,7 +18,21 @@ public class Money {
 		this.used = m.getUsed();
 		this.spended = m.getSpended();
 	}
-
+	public void countMoney(){
+		this.money = this.used - this.spended;
+	}
+	public void setMoney(double money){
+		this.money = money;
+	}
+	public double getMoney(){
+		return this.money;
+	}
+    public void setUsed(double used){
+    	this.used = used;
+    }
+    public void setSpended(double spended){
+    	this.spended = spended;
+    }
 	public int getId() {
 		return this.userId;
 	}

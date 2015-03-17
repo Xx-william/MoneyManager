@@ -25,7 +25,7 @@ public class History extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Item> buyed;
 	private Item item1;
-	private JTable table;
+	private JTable table_History;
 
 	/**
 	 * Create the panel.
@@ -37,8 +37,8 @@ public class History extends JPanel {
 		DefaultListModel model = new DefaultListModel();
 		buyed = new ArrayList<Item>();
 		ServerConnector ser = new ServerConnector(
-				"11SELECT * FROM Haobanghsou.Shopping WHERE userName in('"
-						+ User.name + "')#end");
+				"11SELECT * FROM Haobanghsou.Shopping WHERE userName in('" + User.name
+						+ "')#end");
 		try {
 			String stempt = ser.Con();
 			JsonItems ji = new JsonItems(stempt);
@@ -57,16 +57,16 @@ public class History extends JPanel {
 			model.addElement(tempt);
 		}
 
-		JButton btnNewButton = new JButton("\u8FD4\u56DE");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton button_Return = new JButton("\u8FD4\u56DE");
+		button_Return.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				MainPanel mainPanel = new MainPanel(frame);
 				frame.setContentPane(mainPanel);
 			}
 		});
-		btnNewButton.setBounds(141, 82, 117, 29);
-		add(btnNewButton);
+		button_Return.setBounds(141, 82, 117, 29);
+		add(button_Return);
 
 		JLabel label = new JLabel("\u5386\u53F2\u8BB0\u5F55");
 		label.setFont(new Font("Lucida Grande", Font.PLAIN, 24));
@@ -84,7 +84,7 @@ public class History extends JPanel {
 
 		String[] headers = { "日期", "金额", "付款人", "参与者", "ID" };
 		String[][] arr = new String[buyed.size()][5];
-		for (int i = 0,j=buyed.size()-1; i < buyed.size(); i++,j--) {
+		for (int i = 0, j = buyed.size() - 1; i < buyed.size(); i++, j--) {
 			arr[j][0] = buyed.get(i).getDate();
 			arr[j][1] = String.valueOf(buyed.get(i).getAmount());
 			arr[j][2] = buyed.get(i).getName();
@@ -101,24 +101,33 @@ public class History extends JPanel {
 				return false;
 			}
 		};
-		table = new JTable(model1);
-		fitTableColumns(table);
-		scrollPane.setViewportView(table);
-		table.addMouseListener(new MouseAdapter() {
+		table_History = new JTable(model1);
+		fitTableColumns(table_History);
+		scrollPane.setViewportView(table_History);
+		table_History.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 
-					DefaultTableModel tableModel = (DefaultTableModel) table
+					DefaultTableModel tableModel = (DefaultTableModel) table_History
 							.getModel();
 
-					int row = table.getSelectedRow();
-					String[] str = new String[5];
+					int row = table_History.getSelectedRow();
+					String[] str = new String[6];
 					for (int i = 0; i < 5; i++) {
 						str[i] = (String) tableModel.getValueAt(row, i);
 					}
+					int id = Integer.parseInt((String) tableModel.getValueAt(
+							row, 4));
+					String comment = "";
+					for(int i=0;i<buyed.size();i++){
+						if(buyed.get(i).getId() == id){
+							comment = buyed.get(i).getComment();
+						}
+					}
+					str[5] = comment;
 
 					item1 = new Item(str[2], Double.parseDouble(str[1]),
-							str[0], str[3], Integer.parseInt(str[4]));
+							str[0], str[3], Integer.parseInt(str[4]), str[5]);
 					setVisible(false);
 					ItemPanel itempanel = new ItemPanel(frame, item1);
 					frame.setContentPane(itempanel);
@@ -151,7 +160,7 @@ public class History extends JPanel {
 								row, col).getPreferredSize().getWidth();
 				width = Math.max(width, preferedWidth);
 			}
-			header.setResizingColumn(column); 
+			header.setResizingColumn(column);
 			column.setWidth(width + myTable.getIntercellSpacing().width + 19);
 		}
 	}
