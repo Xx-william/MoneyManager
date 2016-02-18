@@ -1,5 +1,5 @@
-# William-France
-Money Cast
+# Money Manager
+================
 We 3 students live in one house, we buy things together,
 such like foods, water and other things. So we need to
 take notes of each people how much money we have used
